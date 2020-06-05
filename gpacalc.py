@@ -4,7 +4,7 @@ from pandas import *
 def setup_and_data(email,password):
     print("\nLogging you in...")
     browser=webdriver.Chrome("chromedriver.exe")
-    browser.implicitly_wait(10)
+    browser.implicitly_wait(20)
     browser.get("http://parents.genesisedu.com/mcvts")
     user=browser.find_element_by_id("j_username")
     user.send_keys(email)
@@ -45,6 +45,18 @@ def setup_and_data(email,password):
         mean.append(str((float(means[0][a][:-1])+float(means[1][a][:-1])+float(means[2][a][:-1])+float(means[3][a][:-1]))/4)+'%')
     new_table["Final Year"]=mean
     print(new_table)
+    for a in range(6):
+        if a!=4:
+            grades=list(new_table[new_table.columns[a]])
+            courses=list(new_table.index)
+            for b in range(0,len(grades)):
+                if float(grades[b][:-1])==0:
+                    g=input("What is your exact grade percentage for "+courses[b]+" for "+new_table.columns[a]+'? If you only know the letter grade, put the minimum grade in percent for that letter grade. If you don\'t have a grade for this subject at this time, put N/A: ')
+                    if g.lower()!="n/a":
+                        if g[-1]!='%':
+                            g+='%'
+                        new_table.at[courses[b],new_table.columns[a]]=g
+                    print('\n')
     mp1=calc_gpa('MP1',new_table)
     mp1w=calc_weighted('MP1',new_table)
     mp2=calc_gpa('MP2',new_table)
@@ -147,14 +159,7 @@ def calc_gpa(s,df):
         if float(grades[a][:-1])!=0:
             uw+=classify(grades[a],0)*float(creds[a])
         else:
-            g=input("What is your exact grade percentage for "+courses[a]+" for "+s+'? If you only know the letter grade, put the minimum grade in percent for that letter grade. If you don\'t have a grade for this subject at this time, put N/A: ')
-            if g.lower()!="n/a":
-                if g[-1]!='%':
-                    g+='%'
-                uw+=classify(g,0)*float(creds[a])
-            else:
-                cred.add(a)
-            print('\n')
+            cred.add(a)
     for each in cred:
         del creds[each]
     uw/=sum(creds)
@@ -174,18 +179,8 @@ def calc_weighted(s,df):
             else:
                 w+=classify(grades[a],0)*float(creds[a])
         else:
-            g=input("What is your exact grade percentage for "+courses[a]+" for "+s+'? If you only know the letter grade, put the minimum grade in percent for that letter grade. If you don\'t have a grade for this subject at this time, put N/A: ')
-            if g.lower()!="n/a":
-                if g[-1]!='%':
-                    g+='%'
-                if "honors" in courses[a].lower():
-                    w+=classify(g,'H')*float(creds[a])
-                elif "ap" in courses[a].lower().split() or "ib" in courses[a].lower().split():
-                    w+=classify(g,'A')*float(creds[a])
-                else:
-                    w+=classify(g,0)*float(creds[a])
-            else:
-                cred.add(a)
+            cred.add(a)
+            print("YES")
     for each in cred:
         del creds[each]
     w/=sum(creds)
