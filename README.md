@@ -11,3 +11,4 @@ Instructions:
 Issues:
 1) Chrome-only
 2) For weighted gpa, class weights are determined by their names (whether they contain honor, ap, or ib), so for classes that are weighted but not named so it won't give the right weighted gpa (not an issue for the Academy)
+3) Doesn't account for final exams yet
