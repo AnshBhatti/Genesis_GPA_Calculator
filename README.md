@@ -1,6 +1,7 @@
 Dependencies:
 - Selenium
 - Pandas
+- lxml
 
 Instructions:
 1) If you haven't yet, update your Google Chrome
