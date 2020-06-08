@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from pandas import *
+#email=input("Email: ")
+#password=input("Password: ")
 def setup_and_data(email,password):
     print("\nLogging you in...")
     browser=webdriver.Chrome("chromedriver.exe")
@@ -13,7 +15,11 @@ def setup_and_data(email,password):
     login=browser.find_element_by_xpath("//input[@type='submit']")
     login.click()
     print("Obtaining data...")
-    browser.find_elements_by_class_name("headerCategoryTab")[2].click()
+    tabs=browser.find_elements_by_class_name("headerCategoryTab")
+    for each in tabs:
+        if each.text=="Grading":
+            each.click()
+            break
     table=read_html(browser.page_source)[1]
     new_table=DataFrame(columns=["Courses","MP1","MP2","MP3","MP4","Credits"])
     d={"Courses":None,"MP1":None,"MP2":None,"MP3":None,"MP4":None,"Credits":None}
@@ -24,7 +30,11 @@ def setup_and_data(email,password):
     new_table.index=new_table["Courses"]
     courses=list(new_table["Courses"])
     del new_table["Courses"]
-    browser.find_elements_by_class_name("headerCategoryTab")[4].click()
+    tabs=browser.find_elements_by_class_name("headerCategoryTab")
+    for each in tabs:
+        if each.text=="Gradebook":
+            each.click()
+            break
     for b in range(4):
         browser.find_element_by_xpath("//select[@name=\'fldMarkingPeriod\']/option[@value=\'MP"+str(b+1)+"\']").click()
         table=read_html(browser.page_source)[1]
