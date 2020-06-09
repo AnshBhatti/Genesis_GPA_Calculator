@@ -1,8 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from pandas import *
-#email=input("Email: ")
-#password=input("Password: ")
 def setup_and_data(email,password):
     print("\nLogging you in...")
     browser=webdriver.Chrome("chromedriver.exe")
@@ -190,7 +188,6 @@ def calc_weighted(s,df):
                 w+=classify(grades[a],0)*float(creds[a])
         else:
             cred.add(a)
-            print("YES")
     for each in cred:
         del creds[each]
     w/=sum(creds)
