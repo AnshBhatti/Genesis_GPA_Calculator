@@ -44,6 +44,7 @@ def setup_and_data(email,password):
                 a+=2
             else:
                 a+=1
+    browser.quit()
     new_table=new_table.fillna('0.00%')
     means=[]
     for b in range(4):
